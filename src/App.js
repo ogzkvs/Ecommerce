@@ -1,20 +1,25 @@
 import React from "react"
-import { Text, View } from 'react-native'
+import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './screens/Home'
-import Login from './screens/Login'
 import Register from "./screens/Register";
 import { useSelector, useDispatch, Provider } from 'react-redux'
 import store from "./store";
 import cache from "./cache";
 import LoginScreen from "./screens/LoginScreen";
+import ProductsDetail from "./screens/ProductsDetail";
+import MyCart from "./screens/MyCart";
+import { cartTotalSelector } from "./stores/selectors"
+
 
 const Stack = createNativeStackNavigator();
 
 const Wrapper = () => {
   const { status, token } = useSelector((state) => state.auth)
+  const { total } = useSelector(cartTotalSelector)
   cache.token = token
+  console.log(total)
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -22,11 +27,14 @@ const Wrapper = () => {
           status ? (
             <>
               <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+              <Stack.Screen name="ProductsDetail" component={ProductsDetail} options={{ headerShown: false }} />
+              <Stack.Screen name="MyCart" component={MyCart} options={{ headerShown: false }} />
             </>
           ) :
             <>
               <Stack.Screen name="Register" component={Register} />
               <Stack.Screen name="LoginScreen" component={LoginScreen} />
+
             </>
         }
       </Stack.Navigator >
@@ -43,3 +51,7 @@ const App = () => {
 }
 
 export default App
+
+const styles = StyleSheet.create({
+
+});

@@ -12,9 +12,9 @@ const get = query => {
 };
 
 
-const getWithPage = (endpoint, page) => {
+const getWithPage = (endpoint) => {
 
-    const link = settings.api + endpoint + '?page=' + page;
+    const link = endpoint
     return axios(link, {
         headers: { Authorization: cache.token },
         method: 'GET',

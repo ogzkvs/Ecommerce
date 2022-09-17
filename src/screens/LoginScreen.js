@@ -18,12 +18,12 @@ const LoginScreen = () => {
             loginPost.current.email === '' ||
             loginPost.current.password === ''
         ) {
-            Alert.alert('Bilgi', 'Boş yerleri doldurun', [{ text: 'Ok' }]);
+            Alert.alert('Bilgi', 'Boş yerleri doldurun', [{ text: 'Tamam' }]);
         } else {
             postLogin('/api/login', loginPost.current).then(response => {
                 console.log("response", response.data.message)
                 dispatch(signin({ token: 'Bearer ' + response.data.token }))
-            }).catch(err => { Alert.alert('Bilgi', 'Kullanıcıya ait kayıt bulunamadı', [{ text: 'Ok' }]); })
+            }).catch(err => { Alert.alert('Bilgi', 'Kullanıcıya ait kayıt bulunamadı', [{ text: 'Tamam' }]); })
         }
     }
 
@@ -38,7 +38,6 @@ const LoginScreen = () => {
                 <View style={{ marginTop: 26 }}>
                     <TextInput
                         label="Password"
-
                         onChangeText={text => (loginPost.current.password = text)}
                         secureTextEntry
                         mode="outlined"

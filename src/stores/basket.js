@@ -8,7 +8,7 @@ export const basket = createSlice({
 
     reducers: {
         addToCart(state, { payload }) {
-            console.log(state)
+
             const { id } = payload;
             const find = state.find((item) => item.id === id)
             if (find) {

@@ -1,11 +1,16 @@
 import React, {useEffect} from 'react';
-import {Text, View, StyleSheet, Alert} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Alert,
+  KeyboardAvoidingView,
+} from 'react-native';
 import {TextInput, Button} from 'react-native-paper';
 import {useSelector, useDispatch} from 'react-redux';
-import {signin} from '../stores/auth';
+import {signin, userinfo} from '../stores/auth';
 import {postLogin} from '../service';
 import AsyncStorageStatic from '@react-native-async-storage/async-storage';
-import cache from '../cache';
 
 const LoginScreen = ({navigation}) => {
   const loginPost = React.useRef({
@@ -13,26 +18,13 @@ const LoginScreen = ({navigation}) => {
     password: '',
   });
   const dispatch = useDispatch();
-  useEffect(() => {
-    getData();
-    //setToken();
-  }, []);
+  useEffect(() => {}, []);
 
-  const getData = () => {
-    try {
-      AsyncStorageStatic.getItem('token').then(value => {
-        if (value != null) {
-          dispatch(signin({token: 'Bearer ' + value}));
-        }
-      });
-    } catch {
-      console.log(error);
-    }
-  };
-
-  const setToken = async token => {
+  const setToken = async (token, name, email) => {
     try {
       await AsyncStorageStatic.setItem('token', token);
+      await AsyncStorageStatic.setItem('name', JSON.stringify(name));
+      await AsyncStorageStatic.setItem('email', JSON.stringify(email));
     } catch (error) {
       console.log(error);
     }
@@ -44,12 +36,33 @@ const LoginScreen = ({navigation}) => {
     } else {
       postLogin('/api/login', loginPost.current)
         .then(response => {
-          console.log('response', response.data.message);
-          if (response.data.message === 'Parola Hatalı') {
+          if (
+            response.data.message === 'Parola Hatalı' &&
+            response.data.status === false
+          ) {
             Alert.alert('Bilgi', 'Parola Hatalı', [{text: 'Tamam'}]);
+          } else if (
+            response.data.status === false &&
+            response.data.message === 'Kullanıcıya ait kayıt bulunamadı!'
+          ) {
+            Alert.alert('Bilgi', 'Kullanıcıya ait kayıt bulunamadı!', [
+              {text: 'Tamam'},
+            ]);
           } else {
             dispatch(signin({token: 'Bearer ' + response.data.token}));
-            setToken(response.data.token);
+            dispatch(
+              userinfo({
+                name: response.data.user.name,
+                email: response.data.user.email,
+                token: 'Bearer ' + response.data.token,
+              }),
+            );
+
+            setToken(
+              response.data.token,
+              response.data.user.name,
+              response.data.user.email,
+            );
           }
         })
         .catch(err => {
@@ -70,7 +83,7 @@ const LoginScreen = ({navigation}) => {
         />
         <View style={{marginTop: 26}}>
           <TextInput
-            label="Password"
+            label="Şifre"
             onChangeText={text => (loginPost.current.password = text)}
             secureTextEntry
             mode="outlined"
@@ -78,7 +91,7 @@ const LoginScreen = ({navigation}) => {
         </View>
       </View>
       <Button mode="contained" onPress={() => login()}>
-        LOGIN
+        GİRİŞ
       </Button>
     </View>
   );

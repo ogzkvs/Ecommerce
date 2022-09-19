@@ -62,7 +62,7 @@ function HomeScreen({navigation}) {
             </View>
             <View style={styles.txtView}>
               <Text style={styles.txtProducts}>{item.title}</Text>
-              <Text style={styles.txtPrice}>{item.price}</Text>
+              <Text style={styles.txtPrice}>₺{item.price}</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -72,7 +72,6 @@ function HomeScreen({navigation}) {
   const handleLoadMore = () => {
     if (products.next_page_url !== null) {
       setLoading(true);
-      console.log(products.next_page_url);
       getWithPage(products.next_page_url).then(response => {
         dispatch(loadMoreProduct(response.data.products));
         setLoading(false);

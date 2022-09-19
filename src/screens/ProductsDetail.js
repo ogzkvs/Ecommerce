@@ -35,7 +35,7 @@ const ProductsDetail = ({route, navigation}) => {
               </View>
               <View style={styles.txtView}>
                 <Text style={styles.txtProducts}>{product.title}</Text>
-                <Text style={styles.txtPrice}>{product.price}</Text>
+                <Text style={styles.txtPrice}>₺{product.price}</Text>
                 <View style={styles.descriptionView}>
                   <Text style={styles.txtProducts}>{product.description}</Text>
                 </View>

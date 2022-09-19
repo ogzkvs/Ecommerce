@@ -6,7 +6,8 @@ export const auth = createSlice({
     status: false,
     token: '',
     loginin: true,
-    active: true,
+    name: '',
+    email: '',
   },
 
   reducers: {
@@ -17,16 +18,18 @@ export const auth = createSlice({
     loginin: (state, action) => {
       state.loginin = false;
     },
+    userinfo: (state, action) => {
+      state.token = action.payload.token;
+      state.name = action.payload.name;
+      state.email = action.payload.email;
+    },
     signout: (state, action) => {
       state.status = false;
       state.token = '';
     },
-    click: (state, action) => {
-      state.active = false;
-    },
   },
 });
 
-export const {signin, signout, loginin, click} = auth.actions;
+export const {signin, signout, loginin, userinfo} = auth.actions;
 
 export default auth.reducer;

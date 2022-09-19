@@ -23,11 +23,13 @@ const postRegister = (endpoint, data) => {
     method: 'post',
     url: settings.api + endpoint,
     headers: {
+      Authorization: cache.token,
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
     data: data,
   };
+
   return axios(config);
 };
 

@@ -15,6 +15,7 @@ import AsyncStorageStatic from '@react-native-async-storage/async-storage';
 
 const CustomDrawer = ({status, fetchData, navigation}) => {
   const dispatch = useDispatch();
+
   const [data, setData] = useState([
     {id: -1, All: 'All', id: -2, Home: 'Anasayfa'},
   ]);
@@ -99,17 +100,30 @@ const CustomDrawer = ({status, fetchData, navigation}) => {
         showsHorizontalScrollIndicator={false}
       />
       {status === 'active' ? null : (
-        <TouchableOpacity
-          onPress={() => {
-            handleLogout();
-          }}>
-          <View style={styles.container}>
-            <View style={styles.categorytxt}></View>
-            <View style={styles.txtStyle}>
-              <Text style={styles.txt}>Çıkış Yap</Text>
+        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Profil');
+            }}>
+            <View style={styles.container}>
+              <View style={styles.categorytxt}></View>
+              <View style={styles.txtStyle}>
+                <Text style={styles.txt}>Profil</Text>
+              </View>
             </View>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              handleLogout();
+            }}>
+            <View style={styles.container}>
+              <View style={styles.categorytxt}></View>
+              <View style={styles.txtStyle}>
+                <Text style={styles.txt}>Çıkış Yap</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   );

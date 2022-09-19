@@ -27,10 +27,13 @@ const MyCart = ({route, navigation}) => {
         <View style={styles.storeItemImg}>
           <Image style={styles.storeItemImage} source={{uri: item.image}} />
         </View>
+
         <View style={styles.storeItemInfo}>
-          <View style={styles.closeTitle}>
-            <Text style={styles.storeItemTitle}>{item.title}</Text>
-            <View style={styles.cartItemRemove}>
+          <View style={styles.topContainer}>
+            <View style={styles.titleView}>
+              <Text style={styles.storeItemTitle}>{item.title}</Text>
+            </View>
+            <View style={styles.closeTitle}>
               <TouchableOpacity
                 onPress={() => {
                   dispatch(removeItem(item.id));
@@ -40,31 +43,38 @@ const MyCart = ({route, navigation}) => {
               </TouchableOpacity>
             </View>
           </View>
-          <Text style={styles.storeItemPrice}>
-            ₺{item.quantity * item.price}
-          </Text>
           <View style={styles.addToCart}>
-            <View style={styles.cartItemAmount}>
-              <TouchableOpacity
-                onPress={() => {
-                  if (item.quantity === 1) {
-                    dispatch(removeItem(item.id));
+            <View style={styles.txtView}>
+              <Text style={styles.storeItemPrice}>
+                ₺{item.quantity * item.price}
+              </Text>
+            </View>
 
-                    console.log('removed');
-                    return;
-                  } else {
-                    dispatch(decrement(item.id));
-                  }
-                }}>
-                <Ionicons name="remove-outline" size={25} />
-              </TouchableOpacity>
+            <View style={styles.cartItemAmount}>
+              <View style={styles.amountView}>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (item.quantity === 1) {
+                      dispatch(removeItem(item.id));
+
+                      console.log('removed');
+                      return;
+                    } else {
+                      dispatch(decrement(item.id));
+                    }
+                  }}>
+                  <Ionicons name="remove-outline" size={25} />
+                </TouchableOpacity>
+              </View>
               <Text style={styles.cartItemAmountText}>{item.quantity}</Text>
-              <TouchableOpacity
-                onPress={() => {
-                  dispatch(increment(item.id));
-                }}>
-                <Ionicons name="add-outline" size={25} />
-              </TouchableOpacity>
+              <View style={styles.amountView}>
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch(increment(item.id));
+                  }}>
+                  <Ionicons name="add-outline" size={25} />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
@@ -130,10 +140,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginVertical: 5,
     marginHorizontal: 10,
-    borderColor: 'black',
-    borderWidth: 1,
     borderRadius: 22,
-    backgroundColor: 'white',
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
   },
   storeItemImg: {
@@ -147,23 +155,23 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   storeItemInfo: {
-    width: '70%',
-    padding: 10,
+    width: '75%',
   },
   storeItemTitle: {
     fontSize: 18,
     fontWeight: 'bold',
   },
   storeItemPrice: {
-    fontSize: 16,
+    fontSize: 17,
     color: '#995D28',
   },
   addToCart: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 5,
-    marginTop: 10,
-    justifyContent: 'center',
+    marginTop: 25,
+    justifyContent: 'space-around',
     alignItems: 'center',
+    width: 250,
+    flexDirection: 'row',
   },
   addToCartText: {
     color: '#FEFEFE',
@@ -174,15 +182,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '80%',
+    width: '35%',
+    backgroundColor: '#F5F5F5',
+    borderRadius: 15,
   },
   cartItemAmountText: {
     fontSize: 18,
     fontWeight: 'bold',
   },
-  cartItemRemove: {
-    marginLeft: 50,
-  },
+
   cartItemRemoveButton: {
     marginHorizontal: 20,
     flexDirection: 'row',
@@ -214,10 +222,29 @@ const styles = StyleSheet.create({
     height: 50,
   },
   closeTitle: {
-    flexDirection: 'row',
+    width: 60,
   },
+
   emptyView: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  txtView: {
+    width: 120,
+  },
+  amountView: {
+    backgroundColor: '#FEFEFE',
+    width: 30,
+    borderRadius: 15,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  titleView: {
+    marginLeft: 10,
+  },
+  topContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });

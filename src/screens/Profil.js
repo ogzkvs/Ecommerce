@@ -8,43 +8,38 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import {TextInput, Button} from 'react-native-paper';
+import {useSelector, useDispatch} from 'react-redux';
 import {postRegister} from '../service';
 
-const Register = ({navigation}) => {
-  const register = React.useRef({
-    name: '',
-    email: '',
+const Profil = () => {
+  const user = useSelector(state => state.auth);
+  const update = React.useRef({
+    name: user.name,
+    email: user.email,
     password: '',
     password_confirmation: '',
   });
 
-  const handleRegister = () => {
-    /* const string = JSON.stringify(register.current.email);
-    const found = string(element => element === '@ ');
-    console.log(string);
-    console.log(found);*/
+  const handleUpdate = () => {
     if (
-      register.current.name === '' ||
-      register.current.email === '' ||
-      register.current.password === '' ||
-      register.current.password_confirmation === ''
+      update.current.password === '' ||
+      update.current.password_confirmation === ''
     ) {
       Alert.alert('Bilgi', 'Boş yerleri doldurun', [{text: 'Ok'}]);
     } else if (
-      register.current.password !== register.current.password_confirmation
+      update.current.password !== update.current.password_confirmation
     ) {
       Alert.alert('Bilgi', 'Şifreler Eşleşmiyor', [{text: 'Ok'}]);
     } else if (
-      register.current.password.length &&
-      register.current.password_confirmation.length < 6
+      update.current.password.length &&
+      update.current.password_confirmation.length < 6
     ) {
       Alert.alert('Bilgi', 'Parola minimum 6 karakterden oluşmalıdır', [
         {text: 'Ok'},
       ]);
     } else {
-      postRegister('/api/register', register.current).then(data => {
-        //   console.log(data);
-        navigation.navigate('LoginScreen');
+      postRegister('/api/update-profile', update.current).then(data => {
+        Alert.alert('Bilgi', 'Şifreniz Başarıyla Değiştirildi', [{text: 'Ok'}]);
       });
     }
   };
@@ -55,23 +50,26 @@ const Register = ({navigation}) => {
       style={styles.container}>
       <ScrollView>
         <View style={styles.mainContainer}>
-          <View style={styles.container}>
+          <Text>Hoşgeldin{user.name}</Text>
+          <View style={styles.inputView}>
             <TextInput
               label="Ad Soyad"
-              onChangeText={text => (register.current.name = text)}
               mode="outlined"
+              value={user.name}
+              disabled="true"
             />
             <View style={{marginTop: 26}}>
               <TextInput
                 label="Email"
-                onChangeText={text => (register.current.email = text)}
+                value={user.email}
                 mode="outlined"
+                disabled="true"
               />
             </View>
             <View style={{marginTop: 26}}>
               <TextInput
                 label="Şifre"
-                onChangeText={text => (register.current.password = text)}
+                onChangeText={text => (update.current.password = text)}
                 secureTextEntry
                 mode="outlined"
                 numberOfLines={6}
@@ -81,23 +79,16 @@ const Register = ({navigation}) => {
               <TextInput
                 label="Şifre onayı"
                 onChangeText={text =>
-                  (register.current.password_confirmation = text)
+                  (update.current.password_confirmation = text)
                 }
                 secureTextEntry
                 mode="outlined"
               />
             </View>
           </View>
-          <Button mode="contained" onPress={() => handleRegister()}>
-            KAYIT OL
+          <Button mode="contained" onPress={() => handleUpdate()}>
+            ŞİFREYİ DEĞİŞTİR
           </Button>
-          <View style={{marginTop: 26}}>
-            <Button
-              mode="contained"
-              onPress={() => navigation.navigate('LoginScreen')}>
-              GİRİŞ YAP
-            </Button>
-          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -109,12 +100,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  container: {
+  inputView: {
     justifyContent: 'center',
     flexDirection: 'column',
-    paddingHorizontal: 16,
-    paddingVertical: 56,
+    paddingHorizontal: 20,
+    paddingVertical: 76,
   },
 });
 
-export default Register;
+export default Profil;

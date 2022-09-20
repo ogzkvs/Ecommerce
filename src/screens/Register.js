@@ -8,7 +8,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import {TextInput, Button} from 'react-native-paper';
-import {postRegister} from '../service';
+import {postRegister, checkUser} from '../service';
 
 const Register = ({navigation}) => {
   const register = React.useRef({
@@ -18,34 +18,48 @@ const Register = ({navigation}) => {
     password_confirmation: '',
   });
 
+  const checkEmail = email => {
+    checkUser('/api/check-user', email).then(data => {
+      if (data.data.register_status === true) {
+        Alert.alert('Bilgi', 'Kullanıcıya ait kayıt bulundu!', [
+          {text: 'Tamam'},
+        ]);
+      }
+    });
+  };
+
   const handleRegister = () => {
     /* const string = JSON.stringify(register.current.email);
     const found = string(element => element === '@ ');
     console.log(string);
     console.log(found);*/
+
     if (
       register.current.name === '' ||
       register.current.email === '' ||
       register.current.password === '' ||
       register.current.password_confirmation === ''
     ) {
-      Alert.alert('Bilgi', 'Boş yerleri doldurun', [{text: 'Ok'}]);
+      Alert.alert('Bilgi', 'Boş yerleri doldurun', [{text: 'Tamam'}]);
     } else if (
       register.current.password !== register.current.password_confirmation
     ) {
-      Alert.alert('Bilgi', 'Şifreler Eşleşmiyor', [{text: 'Ok'}]);
+      Alert.alert('Bilgi', 'Şifreler Eşleşmiyor', [{text: 'Tamam'}]);
     } else if (
       register.current.password.length &&
       register.current.password_confirmation.length < 6
     ) {
       Alert.alert('Bilgi', 'Parola minimum 6 karakterden oluşmalıdır', [
-        {text: 'Ok'},
+        {text: 'Tamam'},
       ]);
     } else {
-      postRegister('/api/register', register.current).then(data => {
-        //   console.log(data);
-        navigation.navigate('LoginScreen');
-      });
+      postRegister('/api/register', register.current)
+        .then(data => {
+          navigation.navigate('LoginScreen');
+        })
+        .catch(error => {
+          checkEmail(register.current.email);
+        });
     }
   };
 

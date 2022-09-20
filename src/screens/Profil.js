@@ -50,7 +50,6 @@ const Profil = () => {
       style={styles.container}>
       <ScrollView>
         <View style={styles.mainContainer}>
-          <Text>Hoşgeldin{user.name}</Text>
           <View style={styles.inputView}>
             <TextInput
               label="Ad Soyad"

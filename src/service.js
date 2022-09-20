@@ -33,6 +33,17 @@ const postRegister = (endpoint, data) => {
   return axios(config);
 };
 
+const checkUser = (endpoint, email) => {
+  let formData = new FormData();
+  formData.append('email', email);
+
+  var config = {
+    headers: {'content-type': 'multipart/form-data'},
+  };
+
+  return axios.post(settings.api + endpoint, formData, config);
+};
+
 const postLogin = (endpoint, data) => {
   var data = JSON.stringify(data);
   var config = {
@@ -42,10 +53,9 @@ const postLogin = (endpoint, data) => {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-
     data: data,
   };
   return axios(config);
 };
 
-export {get, postRegister, postLogin, getWithPage};
+export {get, postRegister, postLogin, getWithPage, checkUser};
